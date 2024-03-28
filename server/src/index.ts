@@ -3,12 +3,18 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import { connectToDatabase } from './db/connection.js';
 
 config();
 
 const PORT = process.env.PORT || 8000;
 
 const app: express.Application = express();
+
+// connect to the database
+connectToDatabase()
+  .then(() => console.log('Connected to database successfully'))
+  .catch((err) => console.log(err));
 
 //middleware
 const limiter = rateLimit({
@@ -25,5 +31,5 @@ app.use(express.json());
 
 //listeners
 app.listen(PORT, () => {
-  console.log('server open');
+  console.log('server is running on port ' + PORT);
 });
