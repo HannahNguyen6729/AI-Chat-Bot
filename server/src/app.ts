@@ -3,6 +3,8 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import morgan from 'morgan';
+import appRouter from './routes/index.js';
 
 config();
 
@@ -20,5 +22,11 @@ app.use(limiter);
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+
+//remove it in production
+app.use(morgan('dev'));
+
+//routes
+app.use('/api/v1/', appRouter);
 
 export default app;
