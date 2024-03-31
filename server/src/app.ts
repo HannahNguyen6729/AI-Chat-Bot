@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import appRouter from './routes/index.js';
+import cookieParser from 'cookie-parser';
 
 config();
 
@@ -25,6 +26,8 @@ app.use(express.json());
 
 //remove it in production
 app.use(morgan('dev'));
+
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 //routes
 app.use('/api/v1/', appRouter);
