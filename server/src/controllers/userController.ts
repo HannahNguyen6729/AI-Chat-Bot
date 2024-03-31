@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import { createAccessToken } from '../utils/token.js';
@@ -115,5 +115,30 @@ export const userLoginController = async (req: Request, res: Response) => {
     return res
       .status(406)
       .json({ message: 'cannot login', error: error.message });
+  }
+};
+
+export const verifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    //check if the access token is valid
+    const user = await User.findById(res.locals.jwtData.userId);
+    if (!user) {
+      return res
+        .status(401)
+        .send('User not registered OR access token malfunctioned');
+    }
+    if (user._id.toString() !== res.locals.jwtData.userId) {
+      return res.status(401).send("Permissions didn't match");
+    }
+    return res
+      .status(200)
+      .json({ message: 'OK', name: user.name, email: user.email });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({ message: 'ERROR', cause: error.message });
   }
 };

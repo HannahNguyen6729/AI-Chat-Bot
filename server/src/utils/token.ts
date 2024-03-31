@@ -25,13 +25,14 @@ export const verifyAccessToken = async (
   next: NextFunction
 ) => {
   const accessToken = req.signedCookies[COOKIE_NAME];
+  //console.log({ accessToken });
   if (!accessToken || accessToken.trim() == '') {
     return res.status(401).send({ message: 'access token not found' });
   }
-  console.log({ accessToken: accessToken });
+
   try {
     const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET);
-    console.log({ decodedToken });
+    // console.log({ decodedToken });
     res.locals.jwtData = decodedToken;
     next();
   } catch (error) {
