@@ -7,8 +7,9 @@ import {
 import {
   getAllUsersController,
   userLoginController,
+  userLogoutController,
   userSignupController,
-  verifyUser,
+  verifyUserController,
 } from '../controllers/userController.js';
 import { verifyAccessToken } from '../utils/token.js';
 
@@ -16,7 +17,8 @@ const userRoutes = express.Router();
 
 userRoutes.post('/signup', validate(signupValidator), userSignupController);
 userRoutes.post('/login', validate(loginValidator), userLoginController);
-userRoutes.get('/auth-status', verifyAccessToken, verifyUser);
+userRoutes.get('/auth-status', verifyAccessToken, verifyUserController);
 userRoutes.get('/', getAllUsersController);
+userRoutes.get('/logout', verifyAccessToken, userLogoutController);
 
 export default userRoutes;
