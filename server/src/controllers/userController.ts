@@ -142,3 +142,17 @@ export const verifyUser = async (
     return res.status(200).json({ message: 'ERROR', cause: error.message });
   }
 };
+
+export const getAllUsersController = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find();
+    return res
+      .status(200)
+      .json({ message: 'get all users successfully', users });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: 'system error', error: error.message });
+  }
+};
