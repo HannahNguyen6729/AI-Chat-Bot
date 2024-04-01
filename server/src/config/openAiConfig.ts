@@ -1,5 +1,8 @@
 import { Configuration } from 'openai';
 
-export const configurationOpenAI = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+export const configurationOpenAI = () => {
+  const config = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  return config;
+};
