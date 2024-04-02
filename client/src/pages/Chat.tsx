@@ -5,7 +5,11 @@ import { IoMdSend } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Message } from '../types/user.type';
-import { getUserChats, sendChatRequest } from '../helper/apiCommunicator';
+import {
+  deleteUserChats,
+  getUserChats,
+  sendChatRequest,
+} from '../helper/apiCommunicator';
 import ChatItem from '../components/chat/ChatItem';
 import toast from 'react-hot-toast';
 
@@ -31,6 +35,15 @@ const Chat = () => {
 
   const handleDeleteChats = async () => {
     //handle logic here
+    try {
+      toast.loading('Deleting chats', { id: 'deletechats' });
+      await deleteUserChats();
+      setChatMessages([]);
+      toast.success('Deleted chats successfully', { id: 'deletechats' });
+    } catch (error) {
+      console.log(error);
+      toast.error('Deleting chats failed', { id: 'deletechats' });
+    }
   };
 
   useEffect(() => {
