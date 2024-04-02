@@ -3,6 +3,7 @@ import { IoIosLogIn } from 'react-icons/io';
 import { Box, Typography, Button } from '@mui/material';
 import CustomizedInput from '../components/share/CustomizedInput';
 import { AuthContext } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const auth = useContext(AuthContext);
@@ -14,9 +15,12 @@ const Login = () => {
     const password = formData.get('password') as string;
     console.log(email, password);
     try {
+      toast.loading('Signing in ...', { id: 'login' });
       await auth?.login(email, password);
+      toast.success('Login Successfully', { id: 'login' });
     } catch (error) {
       console.log(error);
+      toast.error('Login Failed', { id: 'login' });
     }
   };
 
