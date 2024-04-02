@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { User } from '../types/user.type';
+import { loginUser } from '../helper/apiCommunicator';
 
 type AuthContextType = {
   isLoggedIn: boolean;
@@ -16,7 +17,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = async (email: string, password: string) => {};
+  const login = async (email: string, password: string) => {
+    const data = await loginUser(email, password);
+    console.log({ logindata: data });
+    if (data) {
+      setUser({ email: data.email, name: data.name });
+      setIsLoggedIn(true);
+    }
+  };
   const signup = async (name: string, email: string, password: string) => {};
   const logout = async () => {};
 

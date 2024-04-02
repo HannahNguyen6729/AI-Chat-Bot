@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { IoIosLogIn } from 'react-icons/io';
 import { Box, Typography, Button } from '@mui/material';
 import CustomizedInput from '../components/share/CustomizedInput';
+import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {};
+  const auth = useContext(AuthContext);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    console.log(email, password);
+    try {
+      await auth?.login(email, password);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Box width={'100%'} height={'100%'} display="flex" flex={1}>
