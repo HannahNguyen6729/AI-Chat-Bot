@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { User } from '../types/user.type';
-import { loginUser } from '../helper/apiCommunicator';
+import { checkAuthStatus, loginUser } from '../helper/apiCommunicator';
 
 type AuthContextType = {
   isLoggedIn: boolean;
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     const data = await loginUser(email, password);
-    console.log({ logindata: data });
+
     if (data) {
       setUser({ email: data.email, name: data.name });
       setIsLoggedIn(true);
@@ -28,7 +28,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signup = async (name: string, email: string, password: string) => {};
   const logout = async () => {};
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // if the user's cookies are valid then skip login
+    const isUserAuthenticated = async () => {
+      const data = await checkAuthStatus();
+      if (data) {
+        setUser({ email: data.email, name: data.name });
+        setIsLoggedIn(true);
+      }
+    };
+    isUserAuthenticated();
+  }, []);
 
   const value = {
     isLoggedIn,
