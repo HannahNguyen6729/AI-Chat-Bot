@@ -21,7 +21,12 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 //remove it in production
