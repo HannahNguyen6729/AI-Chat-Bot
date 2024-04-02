@@ -1,4 +1,10 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Box, Avatar, Typography, Button, IconButton } from '@mui/material';
 import red from '@mui/material/colors/red';
 import { IoMdSend } from 'react-icons/io';
@@ -46,13 +52,7 @@ const Chat = () => {
     }
   };
 
-  useEffect(() => {
-    if (!auth?.user) {
-      return navigate('/login');
-    }
-  }, [auth, navigate]);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (auth?.isLoggedIn && auth.user) {
       toast.loading('Loading Chats', { id: 'loadchats' });
       getUserChats()
@@ -66,6 +66,12 @@ const Chat = () => {
         });
     }
   }, [auth]);
+
+  useEffect(() => {
+    if (!auth?.user) {
+      return navigate('/login');
+    }
+  }, [auth, navigate]);
 
   return (
     <Box
@@ -181,10 +187,10 @@ const Chat = () => {
             margin: 'auto',
           }}
         >
-          {' '}
           <input
             ref={inputRef}
             type="text"
+            placeholder="enter a promt here"
             style={{
               width: '100%',
               backgroundColor: 'transparent',

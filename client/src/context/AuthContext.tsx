@@ -1,6 +1,11 @@
 import { createContext, useEffect, useState } from 'react';
 import { User } from '../types/user.type';
-import { checkAuthStatus, loginUser } from '../helper/apiCommunicator';
+import {
+  checkAuthStatus,
+  loginUser,
+  logoutUser,
+  signupUser,
+} from '../helper/apiCommunicator';
 
 type AuthContextType = {
   isLoggedIn: boolean;
@@ -21,12 +26,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const data = await loginUser(email, password);
 
     if (data) {
-      setUser({ email: data.email, name: data.name });
+      setUser({ email: data.user.email, name: data.user.name });
       setIsLoggedIn(true);
     }
   };
-  const signup = async (name: string, email: string, password: string) => {};
-  const logout = async () => {};
+
+  const signup = async (name: string, email: string, password: string) => {
+    const data = await signupUser(name, email, password);
+
+    if (data) {
+      setUser({ email: data.user.email, name: data.user.name });
+      setIsLoggedIn(true);
+    }
+  };
+
+  const logout = async () => {
+    await logoutUser();
+    setIsLoggedIn(false);
+    setUser(null);
+    window.location.reload();
+  };
 
   useEffect(() => {
     // if the user's cookies are valid then skip login
